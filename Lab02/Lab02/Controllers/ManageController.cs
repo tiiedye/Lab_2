@@ -54,14 +54,7 @@ namespace Lab02.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+            ViewBag.StatusMessage = GetMessage(message);
 
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
@@ -73,6 +66,17 @@ namespace Lab02.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        private static string GetMessage(ManageMessageId? message)
+        {
+            return message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                            : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                            : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+                            : message == ManageMessageId.Error ? "An error has occurred."
+                            : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+                            : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                            : "";
         }
 
         //
